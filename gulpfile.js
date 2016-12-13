@@ -40,6 +40,10 @@ gulp.task('clean-styles', function ()	 { // It is needed to add a callback becau
 	clean(files);
 })
 
+gulp.task('less-watcher' , function () {
+	gulp.watch([config.less], ['styles']);
+})
+
 
 /////////////
 
