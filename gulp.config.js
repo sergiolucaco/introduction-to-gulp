@@ -1,8 +1,8 @@
 module.exports = function () {
 	var client = './src/client/';
 	var clientApp = client + 'app/';
-	var server = './src/server/'
-	var temp = './.tmp/'
+	var server = './src/server/';
+	var temp = './.tmp/';
 
 	var config = {
 		// files paths
@@ -16,7 +16,7 @@ module.exports = function () {
 		js :  [ 
 				clientApp +'**/*.module.js',
 				clientApp +'**/*.js',
-				"!" + clientApp + '**/*.spec.js' // to exclude those files
+				'!' + clientApp + '**/*.spec.js' // to exclude those files
 		],
 		less : client + 'styles/styles.less',
 		temp : temp,
@@ -42,8 +42,8 @@ module.exports = function () {
 			directory : config.bower.directory,
 			ignorePath : config.bower.ignorePath
 		};
-		return options
-	} 
+		return options;
+	}; 
 
 
 	return config;
