@@ -1,14 +1,13 @@
 module.exports = function () {
+	var client = './src/client/';
 	var config = {
-		/**
-		* File paths
-		*/
-
-		// all js to test(vet)
+		temp : './.tmp',
+		// files paths
 		alljs : [ 
 			'./src/**/*.js',
 			'./*.js'
-			]
+			],
+		less : client + 'styles/styles.less'
 	};
 
 	return config;
