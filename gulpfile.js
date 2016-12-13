@@ -1,7 +1,7 @@
 var gulp = require ('gulp');
 var args = require('yargs').argv;
 var config = require('./gulp.config')();
-
+var del = require('del');
 // //Plugins Gulp
 // var jshint = require ('gulp-jshint');
 // var jscs = require ('gulp-jscs');
@@ -25,7 +25,7 @@ gulp.task('vet', function() {
 		});
 
 
-gulp.task('styles',function() {
+gulp.task('styles', ['clean-styles']  , function() {
 	log('Compiling Less --> CSS')
 
 	return gulp
@@ -35,7 +35,19 @@ gulp.task('styles',function() {
 		.pipe(gulp.dest(config.temp));
 })
 
-///////////////////
+gulp.task('clean-styles', function ()	 { // It is needed to add a callback because there is no stream ( TODO )
+	var files = config.temp + '**/*.css';
+	clean(files);
+})
+
+
+/////////////
+
+function clean(path){
+	log('Cleaning' + $.util.colors.blue(path));
+	del(path);
+}
+
 
 
 function log(msg) {
