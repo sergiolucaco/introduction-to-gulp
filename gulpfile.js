@@ -48,7 +48,7 @@ gulp.task('less-watcher' , function () {
 
 gulp.task('wiredep' , function () {
 	var options = config.getWiredepDefaultOptions();
-	var wiredep = require ('wiredep').stream
+	var wiredep = require ('wiredep').stream // A property which allow us to use in pipe.
 	return gulp
 			.src(config.index)
 			.pipe(wiredep(options))
