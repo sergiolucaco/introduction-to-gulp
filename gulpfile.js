@@ -2,6 +2,7 @@ var gulp = require ('gulp');
 var args = require('yargs').argv;
 var config = require('./gulp.config')();
 var del = require('del');
+var port = process.env.PORT || config.defaultPort;
 // //Plugins Gulp
 // var jshint = require ('gulp-jshint');
 // var jscs = require ('gulp-jscs');
@@ -10,6 +11,9 @@ var del = require('del');
 // var gulpif = require('gulp-if');
 
 var $ = require('gulp-load-plugins')({lazy : true});
+
+
+
 
 gulp.task('vet', function() {
 	log('Analizing source with JSHint and JSCS');
@@ -57,12 +61,26 @@ gulp.task('wiredep' , function () {
 			.pipe(gulp.dest(config.client));
 })
 
-gulp.task('inject' , ['wiredep','styles'] ,   function () {
+gulp.task('inject' , ['wiredep','styles'] ,   function () { // this task is not include in wiredep task because the postinstall script in bower.json must be fast.
 	log('Wire up the bower css js and our app js into the html');
 	return gulp
 			.src(config.index)
 			.pipe($.inject(gulp.src(config.css)))
 			.pipe(gulp.dest(config.client));
+}) // This task will happen when the styles and the wiredep triggered .
+
+gulp.task('serve-dev' , ['inject'], function (){
+	var isDev = true ;
+	var nodeOptions = {
+		script : config.nodeServer,
+		delayTime : 1,
+		env : {
+			'PORT' : port,
+			'NODE_ENV' : isDev ? 'dev' : 'build'
+		},
+		watch : [ config.server ] // define the files to restart on.
+	}
+	return $.nodemon(nodeOptions);
 })
 
 /////////////
