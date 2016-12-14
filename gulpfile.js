@@ -119,7 +119,7 @@ gulp.task('wiredep' , function () {
 			.pipe(gulp.dest(config.client));
 });
 
-gulp.task('inject' , ['wiredep','styles'] ,   function () { 
+gulp.task('inject' , ['wiredep','styles', 'templatecache'] ,   function () { 
 // this task is not include in wiredep task because the postinstall script in bower.json must be fast.
 	log('Wire up the bower css js and our app js into the html');
 	return gulp
@@ -127,6 +127,20 @@ gulp.task('inject' , ['wiredep','styles'] ,   function () {
 			.pipe($.inject(gulp.src(config.css)))
 			.pipe(gulp.dest(config.client));
 }); // This task will happen when the styles and the wiredep triggered .
+
+gulp.task('optimize' , [ 'inject' ], function () {
+	log('Optimizing html css and js');
+
+	var templateCache = config.temp + config.templateCache.file;
+
+	return gulp 
+			.src(config.index)
+			.pipe($.plumber())
+			.pipe($.inject(gulp.src(templateCache, { read : false },{
+				starttag: ' <!-- inject:templates:js -->'	
+			})))
+			.pipe(gulp.dest(config.build));
+})
 
 gulp.task('serve-dev' , ['inject'], function (){
 // this task allow us to run the app locally without recharging manually
