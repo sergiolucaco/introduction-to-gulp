@@ -82,6 +82,16 @@ gulp.task('clean-styles', function () { // It is needed to add a callback becaus
 	clean(config.temp + '**/*.css');
 });
 
+gulp.task('clean-code', function (done) { 
+	var files = [].concat(
+			config.temp + '**/*.js',
+			config.build + '**/*.html',
+			config.build + 'js/**/*.js'
+
+		) 
+	clean(files, done);
+});
+
 gulp.task('less-watcher' , function () {
 	gulp.watch([config.less], ['styles']);
 });
