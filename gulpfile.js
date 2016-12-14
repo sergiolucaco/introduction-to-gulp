@@ -131,14 +131,20 @@ gulp.task('inject' , ['wiredep','styles', 'templatecache'] ,   function () {
 gulp.task('optimize' , [ 'inject' ], function () {
 	log('Optimizing html css and js');
 
+	var assets = $.useref.assets({searchPath: './'});
 	var templateCache = config.temp + config.templateCache.file;
-
+	
 	return gulp 
 			.src(config.index)
 			.pipe($.plumber())
 			.pipe($.inject(gulp.src(templateCache, { read : false },{
 				starttag: ' <!-- inject:templates:js -->'	
 			})))
+			.pipe(assets)//inject all the assets of the js and css files
+			.pipe(assets.restore()) // restore to get back all the html files. ( only index)
+// by default concatenate everything js and css code in only one file. Its taking everything between 
+// tags build.
+			.pipe($.useref()) // to get only one line link for the differents assets.
 			.pipe(gulp.dest(config.build));
 })
 
