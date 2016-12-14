@@ -43,12 +43,11 @@ gulp.task('styles', ['clean-styles']  , function() {
 		.src(config.less)
 		.pipe($.plumber())
 		.pipe($.less())
-//		.on('error', errorLogger)
 		.pipe($.autoprefixer({browsers : ['last 2 version', '> 5%']}))
 		.pipe(gulp.dest(config.temp));
 });
 
-gulp.task('fonts' , function (){
+gulp.task('fonts',['clean-fonts'], function (){
 	log('Copying fonts');
 
 	return gulp
@@ -56,7 +55,7 @@ gulp.task('fonts' , function (){
 			.pipe(gulp.dest(config.build + 'fonts'));
 });
 
-gulp.task('images', function (){
+gulp.task('images', ['clean-images'], function (){
 	log('Copying and compressing images');
 
 	return gulp
@@ -65,9 +64,22 @@ gulp.task('images', function (){
 			.pipe(gulp.dest(config.build + 'images'))
 })
 
-gulp.task('clean-styles', function ()	 { // It is needed to add a callback because there is no stream ( TODO )
-	var files = config.temp + '**/*.css';
-	clean(files);
+gulp.task('clean', function (done) { 
+	var delconfig = [].concat(config.build,config.temp); // to get all the arrays in a unique array
+	log('Cleabubg : ' + $.util.colors.blue(delconfig));
+	del(delconfig, done);
+});
+
+gulp.task('clean-fonts', function (done) {  
+	clean(config.build + 'fonts/**/*.*', done);
+});
+
+gulp.task('clean-images', function (done) { 
+clean(config.build + 'images/**/*.*', done);
+});
+
+gulp.task('clean-styles', function () { // It is needed to add a callback because there is no stream ( TODO )
+	clean(config.temp + '**/*.css');
 });
 
 gulp.task('less-watcher' , function () {
