@@ -70,12 +70,12 @@ gulp.task('clean', function (done) {
 	del(delconfig, done);
 });
 
-gulp.task('clean-fonts', function (done) {  
-	clean(config.build + 'fonts/**/*.*', done);
+gulp.task('clean-fonts', function () {  
+	clean(config.build + 'fonts/**/*.*');
 });
 
-gulp.task('clean-images', function (done) { 
-clean(config.build + 'images/**/*.*', done);
+gulp.task('clean-images', function () { 
+clean(config.build + 'images/**/*.*');
 });
 
 gulp.task('clean-styles', function () { // It is needed to add a callback because there is no stream ( TODO )
