@@ -72,6 +72,7 @@ gulp.task('inject' , ['wiredep','styles'] ,   function () {
 }); // This task will happen when the styles and the wiredep triggered .
 
 gulp.task('serve-dev' , ['inject'], function (){
+// this task allow us to run the app locally without recharging manually
 	var isDev = true ;
 	var nodeOptions = {
 		script : config.nodeServer,
