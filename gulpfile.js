@@ -97,6 +97,7 @@ gulp.task('less-watcher' , function () {
 });
 
 gulp.task('templatecache' , ['clean-code'] ,function () {
+// With this implemented, it will search first if the files needed are in cache or not to avoid http request.
 	log('Creating AngularJs $templateCache');
 	return gulp 
 			.src(config.htmltemplates)
