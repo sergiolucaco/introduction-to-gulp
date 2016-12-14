@@ -23,6 +23,12 @@ module.exports = function () {
 		server : server ,
 
 	/**
+	 * Browser-sync
+	 */
+
+		browserReloadDelay : 1000,
+
+	/**
 	 * Bower and NPM locations
 	 */
 	 	bower : { 

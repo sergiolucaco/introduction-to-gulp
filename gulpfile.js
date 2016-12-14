@@ -84,9 +84,14 @@ gulp.task('serve-dev' , ['inject'], function (){
 	};
 	return $.nodemon(nodeOptions)
 		.on('restart', [ 'vet' ] , function (event){
-// The main advantage of gulp-nodemon is that also you can introduce extra tasks to do during nodemon is active and restarting.
+// The main advantage of gulp-nodemon is that also you can introduce extra tasks to do
+//during nodemon is active and restarting.
 			log('*** nodemon restarted');
 			log('files changed on restart  :\n' + event);
+			setTimeout(function (){
+				browserSync.notify('reloading now ...');
+				browserSync.reload({stream:false});
+			}, config.browserReloadDelay);
 		})
 		.on('start', function (){
 			log('*** nodemon started');
@@ -128,7 +133,7 @@ function startBrowserSync(){
 	gulp.watch([config.less], ['styles'])
 		.on('change', function (event){
 			changeEvent(event);
-		})
+		});
 	
 	var options = {
 		proxy : 'localhost:' + port, //watch out spaces in this string 
@@ -151,7 +156,7 @@ function startBrowserSync(){
 		notify : true, //html popup to show you when its ready
 		reloadDelay : 1000 //delay to show changes
 
-	}
+	};
 
 	browserSync(options); 
 }
