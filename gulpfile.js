@@ -82,19 +82,30 @@ gulp.task('clean-styles', function () { // It is needed to add a callback becaus
 	clean(config.temp + '**/*.css');
 });
 
-gulp.task('clean-code', function (done) { 
+gulp.task('clean-code', function () { // callback TODO
 	var files = [].concat(
 			config.temp + '**/*.js',
 			config.build + '**/*.html',
 			config.build + 'js/**/*.js'
 
 		) 
-	clean(files, done);
+	clean(files);
 });
 
 gulp.task('less-watcher' , function () {
 	gulp.watch([config.less], ['styles']);
 });
+
+gulp.task('templatecache' , ['clean-code'] ,function () {
+	log('Creating AngularJs $templateCache');
+	return gulp 
+			.src(config.htmltemplates)
+			.pipe($.minifyHtml({empty : true})) // to avoid spaces inside the template cache html file.
+			.pipe($.angularTemplatecache(
+			config.templateCache.file ,
+			config.templateCache.options)) // gulp-angular-templatecache 
+			.pipe(gulp.dest(config.temp));
+})	
 
 gulp.task('wiredep' , function () {
 	log('Wire up the bower css js and our app js into the html');
