@@ -131,7 +131,7 @@ gulp.task('inject' , ['wiredep','styles', 'templatecache'] ,   function () {
 gulp.task('optimize' , [ 'inject' ], function () {
 	log('Optimizing html css and js');
 
-	var assets = $.useref.assets({searchPath: './'});
+	var assets = $.useref.assets({searchPath: './'}); 
 	var templateCache = config.temp + config.templateCache.file;
 	
 	return gulp 
