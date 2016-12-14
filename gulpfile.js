@@ -113,30 +113,43 @@ gulp.task('serve-dev' , ['inject'], function (){
 // 	this.emit('end');
 
 // }
+function changeEvent (event) {
+	var srcPattern = new RegExp('/.*(?=/' + config.source + ')/');
+	log('File' + event.path.replace(srcPattern,'') + ' ' + event.type);
 
+}
 function startBrowserSync(){
 	if (browserSync.active) { // to see if it is actually running
 		return ; 
 	}
 
 	log('Starting browser-sync on port' + port);
+
+	gulp.watch([config.less], ['styles'])
+		.on('change', function (event){
+			changeEvent(event);
+		})
 	
 	var options = {
 		proxy : 'localhost:' + port, //watch out spaces in this string 
 		port : 3000,
-		files:[ config.client + '**/*.*'],
+		files:[ 
+		config.client + '**/*.*',
+		'!' + config.less,
+		config.temp + '**/*.css'
+		],
 		ghostMode : {
 			clicks : true,
 			location : false,
 			forms : true,
 			scroll : true
 		},
-		injectChanges : true, // to avoid reload browser constantly
+		injectChanges : true, // to avoid reload browser constantly. It will reload it only with js or html changes.
 		logFileChanges : true,
 		logLevel : 'debug',
 		logPrefix : 'gulp-patterns',
 		notify : true, //html popup to show you when its ready
-		reloadDelay : 1000
+		reloadDelay : 1000 //delay to show changes
 
 	}
 
