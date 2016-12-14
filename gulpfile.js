@@ -14,7 +14,13 @@ var port = process.env.PORT || config.defaultPort;
 var $ = require('gulp-load-plugins')({lazy : true});
 
 
-
+gulp.task('help', $.taskListing);
+// or another way to do the same
+// gulp.task('help', function (){
+// 	$.taskListing();
+// })
+gulp.task('default' , ['help']);
+//This is a quick solution to avoid error default just typing 'gulp'
 
 gulp.task('vet', function() {
 	log('Analizing source with JSHint and JSCS');
