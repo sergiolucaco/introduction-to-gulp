@@ -49,9 +49,20 @@ gulp.task('styles', ['clean-styles']  , function() {
 });
 
 gulp.task('fonts' , function (){
+	log('Copying fonts');
+
 	return gulp
 			.src(config.fonts)
 			.pipe(gulp.dest(config.build + 'fonts'));
+});
+
+gulp.task('images', function (){
+	log('Copying and compressing images');
+
+	return gulp
+			.src(config.images)
+			.pipe($.imagemin({optimizationLevel : 4 })) // by default is 3
+			.pipe(gulp.dest(config.build + 'images'))
 })
 
 gulp.task('clean-styles', function ()	 { // It is needed to add a callback because there is no stream ( TODO )
