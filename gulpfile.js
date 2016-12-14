@@ -124,7 +124,8 @@ function changeEvent (event) {
 
 }
 function startBrowserSync(){
-	if (browserSync.active) { // to see if it is actually running
+	if (args.nosync || browserSync.active) { 
+// if only want to active nodemon without browsersync || to see if it is actually running
 		return ; 
 	}
 
@@ -143,7 +144,8 @@ function startBrowserSync(){
 		'!' + config.less,
 		config.temp + '**/*.css'
 		],
-		ghostMode : {
+		ghostMode : { 
+// this ghostMode is to do the same actions equal true in different browsers at the same time. It will do the same scrolls .. etc
 			clicks : true,
 			location : false,
 			forms : true,
