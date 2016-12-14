@@ -48,6 +48,12 @@ gulp.task('styles', ['clean-styles']  , function() {
 		.pipe(gulp.dest(config.temp));
 });
 
+gulp.task('fonts' , function (){
+	return gulp
+			.src(config.fonts)
+			.pipe(gulp.dest(config.build + 'fonts'));
+})
+
 gulp.task('clean-styles', function ()	 { // It is needed to add a callback because there is no stream ( TODO )
 	var files = config.temp + '**/*.css';
 	clean(files);
