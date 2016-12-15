@@ -156,11 +156,12 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 			//With this gulp plugin we achieve that angularjs recognized the variable names and inject the correct name without mangling.
 			.pipe($.uglify())//minimize all the js of App
 			.pipe(jsAppFilter.restore) // restore to get back all the js of App files
-			
+			.pipe($.rev()) // app.js --> app-1281957r.js
 			.pipe(assets.restore()) // restore to get back all the html files. ( only index)
 // by default concatenate everything js and css code in only one file. Its taking everything between 
 // tags build.
 			.pipe($.useref()) // to get only one line link for the differents assets.
+			.pipe($.revReplace())// to secure that the injection to the html is done with the modified name.
 			.pipe(gulp.dest(config.build));
 })
 
