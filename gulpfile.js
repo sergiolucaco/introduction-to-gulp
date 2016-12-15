@@ -148,9 +148,27 @@ gulp.task('optimize' , [ 'inject' ], function () {
 			.pipe(gulp.dest(config.build));
 })
 
+gulp.task('serve-build' , ['optimize'], function (){
+	serve(false /* isDev*/);
+
+})
+
 gulp.task('serve-dev' , ['inject'], function (){
-// this task allow us to run the app locally without recharging manually
-	var isDev = true ;
+	serve(true /* isDev*/);
+});
+
+/////////////
+
+
+// function errorLogger(error){
+// 	log('***  Start of Error ***');
+// 	log(error);
+// 	log('***  End of Error ***');
+// 	this.emit('end');
+
+// }
+
+function serve(isDev){
 	var nodeOptions = {
 		script : config.nodeServer,
 		delayTime : 1,
@@ -173,7 +191,7 @@ gulp.task('serve-dev' , ['inject'], function (){
 		})
 		.on('start', function (){
 			log('*** nodemon started');
-			startBrowserSync();
+			startBrowserSync(isDev);
 
 		})
 		.on('crash', function (){
@@ -184,44 +202,45 @@ gulp.task('serve-dev' , ['inject'], function (){
 			log('*** nodemon exited cleanly');
 
 		});	
-});
+} 
 
-/////////////
-
-
-// function errorLogger(error){
-// 	log('***  Start of Error ***');
-// 	log(error);
-// 	log('***  End of Error ***');
-// 	this.emit('end');
-
-// }
 function changeEvent (event) {
 	var srcPattern = new RegExp('/.*(?=/' + config.source + ')/');
 	log('File' + event.path.replace(srcPattern,'') + ' ' + event.type);
 
 }
-function startBrowserSync(){
+function startBrowserSync(isDev){
 	if (args.nosync || browserSync.active) { 
 // if only want to active nodemon without browsersync || to see if it is actually running
 		return ; 
 	}
 
 	log('Starting browser-sync on port' + port);
+	if (isDev) {
 
-	gulp.watch([config.less], ['styles'])
-		.on('change', function (event){
-			changeEvent(event);
-		});
+			gulp.watch([config.less], ['styles'])
+				.on('change', function (event){
+					changeEvent(event);
+				});
+
+	} else {
+
+			gulp.watch([config.less, config.js , config.html], ['optimize', browserSync.reload])
+				.on('change', function (event){
+					changeEvent(event);
+				});
+
+	}
+
 	
 	var options = {
 		proxy : 'localhost:' + port, //watch out spaces in this string 
 		port : 3000,
-		files:[ 
+		files: isDev ? [ 
 		config.client + '**/*.*',
 		'!' + config.less,
 		config.temp + '**/*.css'
-		],
+		] : [],
 		ghostMode : { 
 // this ghostMode is to do the same actions equal true in different browsers at the same time. It will do the same scrolls .. etc
 			clicks : true,
