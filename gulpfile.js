@@ -128,7 +128,7 @@ gulp.task('inject' , ['wiredep','styles', 'templatecache'] ,   function () {
 			.pipe(gulp.dest(config.client));
 }); // This task will happen when the styles and the wiredep triggered .
 
-gulp.task('optimize' , [ 'inject' ], function () {
+gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 	log('Optimizing html css and js');
 
 	var assets = $.useref.assets({searchPath: './'}); 
