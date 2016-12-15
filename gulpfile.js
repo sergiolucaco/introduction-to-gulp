@@ -133,7 +133,9 @@ gulp.task('optimize' , [ 'inject' ], function () {
 
 	var assets = $.useref.assets({searchPath: './'}); 
 	var templateCache = config.temp + config.templateCache.file;
-	var cssFilter = $.filter('**/*.css');
+	var cssFilter = $.filter('**/*.css', { restore : true }); // last version gulp-filter syntax + "filtername.restore"
+	var jsFilter = $.filter('**/*.js', { restore : true });
+
 	return gulp 
 			.src(config.index)
 			.pipe($.plumber())
@@ -144,6 +146,10 @@ gulp.task('optimize' , [ 'inject' ], function () {
 			//filter down to css
 			.pipe(cssFilter)//filter all the css to minimize it with csso
 			.pipe($.csso())//minimize all the css 
+			.pipe(cssFilter.restore) // restore to get back all the css files.
+			.pipe(jsFilter)//filter all the js to minimize it with uglify
+			.pipe($.uglify())//minimize all the js 
+			.pipe(jsFilter.restore) // restore to get back all the js files
 			.pipe(assets.restore()) // restore to get back all the html files. ( only index)
 // by default concatenate everything js and css code in only one file. Its taking everything between 
 // tags build.
