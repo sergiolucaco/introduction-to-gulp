@@ -5,7 +5,8 @@
         .module('app.dashboard')
         .controller('Dashboard', Dashboard);
 
-    Dashboard.$inject = ['$state', 'dataservice', 'logger'];
+    Dashboard.$inject = ['$state', 'dataservice', 'logger']; // this allow AngularJS to locate variables when JS is mangled. 
+    // It can also be done automated with gulp.
     function Dashboard($state, dataservice, logger) {
         var vm = this;
         vm.customers = [];
