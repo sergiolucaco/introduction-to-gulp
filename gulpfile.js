@@ -133,7 +133,7 @@ gulp.task('optimize' , [ 'inject' ], function () {
 
 	var assets = $.useref.assets({searchPath: './'}); 
 	var templateCache = config.temp + config.templateCache.file;
-	
+	var cssFilter = $.filter('**/*.css');
 	return gulp 
 			.src(config.index)
 			.pipe($.plumber())
@@ -141,6 +141,9 @@ gulp.task('optimize' , [ 'inject' ], function () {
 				starttag: ' <!-- inject:templates:js -->'	
 			}))
 			.pipe(assets)//inject all the assets of the js and css files
+			//filter down to css
+			.pipe(cssFilter)//filter all the css to minimize it with csso
+			.pipe($.csso())//minimize all the css 
 			.pipe(assets.restore()) // restore to get back all the html files. ( only index)
 // by default concatenate everything js and css code in only one file. Its taking everything between 
 // tags build.

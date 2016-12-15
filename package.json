@@ -25,6 +25,8 @@
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.0.0",
     "gulp-autoprefixer": "^3.1.1",
+    "gulp-csso": "^2.0.0",
+    "gulp-filter": "^4.0.0",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.1.1",
     "gulp-inject": "^4.1.0",
@@ -41,6 +43,7 @@
     "gulp-util": "^3.0.7",
     "jshint": "^2.9.4",
     "jshint-stylish": "^2.2.1",
+    "uglify": "^0.1.5",
     "wiredep": "^4.0.0",
     "yargs": "^6.5.0"
   }
