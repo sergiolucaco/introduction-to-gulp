@@ -162,6 +162,7 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 // tags build.
 			.pipe($.useref()) // to get only one line link for the differents assets.
 			.pipe($.revReplace())// to secure that the injection to the html is done with the modified name.
+			.pipe($.rev.manifest()) // this generate a external document when its available the old and new names.
 			.pipe(gulp.dest(config.build));
 })
 
