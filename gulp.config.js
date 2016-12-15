@@ -26,6 +26,16 @@ module.exports = function () {
 		less : client + 'styles/styles.less',
 		temp : temp,
 		server : server,
+	
+	/**
+	 * optimized files
+	 */
+		optimized : {
+
+			lib : 'lib.js',
+			app : 'app.js'
+
+		},			
 
 	/**
 	 * template cache

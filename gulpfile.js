@@ -134,8 +134,8 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 	var assets = $.useref.assets({searchPath: './'}); 
 	var templateCache = config.temp + config.templateCache.file;
 	var cssFilter = $.filter('**/*.css', { restore : true }); // last version gulp-filter syntax + "filtername.restore"
-	var jsLibFilter = $.filter('**/lib.js', { restore : true });
-	var jsAppFilter = $.filter('**/app.js', { restore : true });
+	var jsLibFilter = $.filter('**/'+ config.optimized.lib, { restore : true });
+	var jsAppFilter = $.filter('**/' +  config.optimized.app, { restore : true });
 
 	return gulp 
 			.src(config.index)
@@ -152,7 +152,7 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 			.pipe($.uglify())//minimize all the js of lib
 			.pipe(jsLibFilter.restore) // restore to get back all the js of App files
 			.pipe(jsAppFilter)//filter all the js of App to minimize it with uglify
-			.pipe($.ngAnnotate()) // To only modify custom code , we must separe in two variables JS.
+			.pipe($.ngAnnotate( { add: true } )) // To only modify custom code , we must separe in two variables JS.
 			//With this gulp plugin we achieve that angularjs recognized the variable names and inject the correct name without mangling.
 			.pipe($.uglify())//minimize all the js of App
 			.pipe(jsAppFilter.restore) // restore to get back all the js of App files
