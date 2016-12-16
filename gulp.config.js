@@ -68,6 +68,12 @@ module.exports = function () {
 	 		'./package.json',
 	 		'./bower.json',
 	 	],
+	
+	/**
+	 * Karma settings
+	 **/
+	 	serverIntegrationSpecs : [ client + 'tests/server-integration/**/*.*'],
+
 	/**
 	 * Node settings
 	 **/

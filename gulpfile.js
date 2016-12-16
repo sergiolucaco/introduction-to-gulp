@@ -206,6 +206,10 @@ gulp.task('serve-dev' , ['inject'], function (){
 	serve(true /* isDev*/);
 });
 
+gulp.task('test', ['vet','templatecache'], function (done){
+	startTests(true /* singleRun */, done );
+})
+
 /////////////
 
 
@@ -307,6 +311,30 @@ function startBrowserSync(isDev){
 	};
 
 	browserSync(options); 
+}
+
+function startTests(singleRun, done){
+	var karma = require('karma').server; //only need in this function
+	var excludeFiles = [];
+	var serverSpecs = config.serverIntegrationSpecs;
+
+	excludeFiles = serverSpecs;
+
+	karma.start({
+		config: __dirname + '/karma.conf.js',
+		exclude: excludeFiles,
+		single: !!singleRun
+	}, karmaCompleted);
+
+	function karmaCompleted(karmaResult) {
+		log('Karma completed!');
+		if (karmaResult === 1){
+			done('karma : tests failed with code ' + karmaResult);
+		} else {
+			done();
+		}
+
+	}
 }
 
 function clean(path){
