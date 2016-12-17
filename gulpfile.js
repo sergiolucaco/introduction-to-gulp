@@ -61,8 +61,8 @@ gulp.task('images', ['clean-images'], function (){
 	return gulp
 			.src(config.images)
 			.pipe($.imagemin({optimizationLevel : 4 })) // by default is 3
-			.pipe(gulp.dest(config.build + 'images'))
-})
+			.pipe(gulp.dest(config.build + 'images'));
+});
 
 gulp.task('clean', function (done) { 
 	var delconfig = [].concat(config.build,config.temp); // to get all the arrays in a unique array
@@ -88,7 +88,7 @@ gulp.task('clean-code', function () { // callback TODO
 			config.build + '**/*.html',
 			config.build + 'js/**/*.js'
 
-		) 
+		); 
 	clean(files);
 });
 
@@ -106,7 +106,7 @@ gulp.task('templatecache' , ['clean-code'] ,function () {
 			config.templateCache.file ,
 			config.templateCache.options)) // gulp-angular-templatecache 
 			.pipe(gulp.dest(config.temp));
-})	
+});	
 
 gulp.task('wiredep' , function () {
 	log('Wire up the bower css js and our app js into the html');
@@ -153,7 +153,8 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 			.pipe(jsLibFilter.restore) // restore to get back all the js of App files
 			.pipe(jsAppFilter)//filter all the js of App to minimize it with uglify
 			.pipe($.ngAnnotate( { add: true } )) // To only modify custom code , we must separe in two variables JS.
-			//With this gulp plugin we achieve that angularjs recognized the variable names and inject the correct name without mangling.
+			//With this gulp plugin we achieve that angularjs recognized the variable names
+			// and inject the correct name without mangling.
 			.pipe($.uglify())//minimize all the js of App
 			.pipe(jsAppFilter.restore) // restore to get back all the js of App files
 			.pipe($.rev()) // app.js --> app-1281957r.js
@@ -208,7 +209,7 @@ gulp.task('serve-dev' , ['inject'], function (){
 
 gulp.task('test', ['vet','templatecache'], function (done){
 	startTests(true /* singleRun */, done );
-})
+});
 
 /////////////
 
@@ -295,7 +296,8 @@ function startBrowserSync(isDev){
 		config.temp + '**/*.css'
 		] : [],
 		ghostMode : { 
-// this ghostMode is to do the same actions equal true in different browsers at the same time. It will do the same scrolls .. etc
+// this ghostMode is to do the same actions equal true in different browsers
+// at the same time. It will do the same scrolls .. etc
 			clicks : true,
 			location : false,
 			forms : true,
@@ -321,9 +323,9 @@ function startTests(singleRun, done){
 	excludeFiles = serverSpecs;
 
 	karma.start({
-		config: __dirname + '/karma.conf.js',
+		configFile: __dirname + '/karma.conf.js',
 		exclude: excludeFiles,
-		single: !!singleRun
+		singleRun: !!singleRun
 	}, karmaCompleted);
 
 	function karmaCompleted(karmaResult) {

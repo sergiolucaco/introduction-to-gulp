@@ -76,6 +76,7 @@ module.exports = function () {
 	/**
 	 * Karma and Testing settings
 	 **/
+	 	specHelpers : [client + 'test-helpers/*.js'],
 	 	serverIntegrationSpecs : [ client + 'tests/server-integration/**/*.*'],
 
 	/**
@@ -106,8 +107,8 @@ module.exports = function () {
 			files : [].concat(
 				bowerFiles,//angular jquery
 				config.specHelpers,
-				client +'**/*.module.js'// first those to download in correct order(our app)
-				client +'**/*.js'
+				client +'**/*.module.js',// first those to download in correct order(our app)
+				client +'**/*.js',
 				temp + config.templateCache.file,//templatecache of every html file
 				config.serverIntegrationSpecs// server files
 			),
@@ -116,14 +117,15 @@ module.exports = function () {
 				dir : report + 'coverage',
 				reporters : [
 					{type : 'html', subdir : 'report-html'},
-					{type : 'lcov', subdir : 'report-lcov'}
+					{type : 'lcov', subdir : 'report-lcov'},
 					{type : 'text-summary'}
 				]
 			},
-			preprocesors : {}
+			preprocessors : {}
 		};
 
-		options.preprocesors[clientApp + '**/!(*.spec)+(*.js)'] = ['coverage'];// to do stuff only real code. Test only real code not also test code.
+		options.preprocessors[clientApp + '**/!(*.spec)+(*.js)'] = ['coverage'];
+		// to do stuff only real code. Test only real code not also test code.
 
 		return options;
 	}

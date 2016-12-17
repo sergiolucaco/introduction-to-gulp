@@ -13,7 +13,8 @@
     }
 
     var config = {
-        appErrorPrefix: '[GulpPatterns Error] ', //Configure the exceptionHandler decorator
+        appErrorPrefix: '[GulpPatterns Error] ', 
+        //Configure the exceptionHandler decorator
         appTitle: 'Gulp Patterns Demo',
         imageBasePath: '/images/photos/',
         unknownPersonImageSource: 'unknown_person.jpg'
@@ -45,7 +46,9 @@
             };
 
             ready.$inject = ['dataservice'];
-            /* @ngInject */ // this comment is to add hints to the gulp plugin ng-annotate and avoid problems with AngularJS 
+            /* @ngInject */ 
+            // this comment is to add hints to the gulp plugin ng-annotate
+            // and avoid problems with AngularJS 
             function ready(dataservice) {
                 return dataservice.ready();
             }
