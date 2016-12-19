@@ -1,6 +1,7 @@
 module.exports = function () {
 	var client = './src/client/';
 	var clientApp = client + 'app/';
+	var rootdir = './';
 	var server = './src/server/';
 	var temp = './.tmp/';
 
@@ -26,7 +27,7 @@ module.exports = function () {
 		less : client + 'styles/styles.less',
 		temp : temp,
 		server : server,
-	
+		root : rootdir,
 	/**
 	 * optimized files
 	 */
@@ -62,6 +63,11 @@ module.exports = function () {
 	 		directory : './bower_components',
 	 		ignorePath : '../..'
 	 	},
+	 	packages : [
+	 		'./package.json',
+	 		'./bower.json'
+
+	 	],
 	/**
 	 * Node settings
 	 **/
