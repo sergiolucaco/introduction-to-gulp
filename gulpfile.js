@@ -178,6 +178,7 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
  */
 
 gulp.task('bump' , function(){
+//this task is to automation the process of updating the app versions.
 	var msg = 'Bumping versions';
 	var type = args.type;
 	var version = args.version;
@@ -193,7 +194,7 @@ gulp.task('bump' , function(){
 	log(msg);
 	return gulp
 			.src(config.packages)
-			.pipe($.print())
+			.pipe($.print())// to see the name file to be bumped
 			.pipe($.bump(options))
 			.pipe(gulp.dest(config.root))
 
@@ -207,6 +208,11 @@ gulp.task('serve-build' , ['optimize'], function (){
 gulp.task('serve-dev' , ['inject'], function (){
 	serve(true /* isDev*/);
 });
+
+gulp.task('test' , ['vet' , 'templatecache'], function (done){
+	startTests(true /* singleRun */, done);
+});
+
 
 /////////////
 
@@ -309,6 +315,31 @@ function startBrowserSync(isDev){
 	};
 
 	browserSync(options); 
+}
+
+function startTests(singleRun,done){
+	var karma = require('karma').server;
+	var excludeFiles = [];
+	var serverSpecs = config.serverIntegrationSpecs;
+
+	excludeFiles = serverSpecs;
+	
+	karma.start({
+		config : __dirname +'/karma.conf.js',
+		exclude : excludeFiles ,
+		singleRun : !!singleRun
+
+	}, karmaCompleted);
+
+	function karmaCompleted(karmaResult){
+		log('karma completed');
+		if(karmaResult === 1) {
+			done('karma : tests failed with code ' + karmaResult);
+		} else {
+			done();
+		}
+	}
+
 }
 
 function clean(path){
