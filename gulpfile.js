@@ -162,6 +162,8 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 // tags build.
 			.pipe($.useref()) // to get only one line link for the differents assets.
 			.pipe($.revReplace())// to secure that the injection to the html is done with the modified name.
+			.pipe(gulp.dest(config.build))//first generate the folder, then add the manifest.
+			.pipe($.rev.manifest())
 			.pipe(gulp.dest(config.build));
 })
 
