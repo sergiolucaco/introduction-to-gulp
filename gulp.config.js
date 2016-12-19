@@ -1,12 +1,8 @@
 module.exports = function () {
 	var client = './src/client/';
 	var clientApp = client + 'app/';
-	var report = './report/';
-	var rootdest = './';
 	var server = './src/server/';
 	var temp = './.tmp/';
-	var wiredep = require('wiredep');
-	var bowerFiles = wiredep({devDependencies : true })['js'];
 
 	var config = {
 		// files paths
@@ -28,8 +24,6 @@ module.exports = function () {
 				'!' + clientApp + '**/*.spec.js' // to exclude those files
 		],
 		less : client + 'styles/styles.less',
-		root : rootdest,
-		report : report,
 		temp : temp,
 		server : server,
 	
@@ -38,7 +32,7 @@ module.exports = function () {
 	 */
 		optimized : {
 
-			lib : 'lib.js', 
+			lib : 'lib.js',
 			app : 'app.js'
 
 		},			
@@ -68,17 +62,6 @@ module.exports = function () {
 	 		directory : './bower_components',
 	 		ignorePath : '../..'
 	 	},
-	 	packages : [
-	 		'./package.json',
-	 		'./bower.json',
-	 	],
-	
-	/**
-	 * Karma and Testing settings
-	 **/
-	 	specHelpers : [client + 'test-helpers/*.js'],
-	 	serverIntegrationSpecs : [ client + 'tests/server-integration/**/*.*'],
-
 	/**
 	 * Node settings
 	 **/
@@ -94,39 +77,6 @@ module.exports = function () {
 		return options;
 	}; 
 
-	config.karma = getKarmaOptions();
 
 	return config;
-
-
-
-	/////////////////////////////////////// Karma overall settings listed in "karma.conf.js"
-
-	function getKarmaOptions() {
-		var options = {
-			files : [].concat(
-				bowerFiles,//angular jquery
-				config.specHelpers,
-				client +'**/*.module.js',// first those to download in correct order(our app)
-				client +'**/*.js',
-				temp + config.templateCache.file,//templatecache of every html file
-				config.serverIntegrationSpecs// server files
-			),
-			exclude : [],
-			coverage : {
-				dir : report + 'coverage',
-				reporters : [
-					{type : 'html', subdir : 'report-html'},
-					{type : 'lcov', subdir : 'report-lcov'},
-					{type : 'text-summary'}
-				]
-			},
-			preprocessors : {}
-		};
-
-		options.preprocessors[clientApp + '**/!(*.spec)+(*.js)'] = ['coverage'];
-		// to do stuff only real code. Test only real code not also test code.
-
-		return options;
-	}
 };

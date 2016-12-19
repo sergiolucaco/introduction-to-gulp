@@ -61,8 +61,8 @@ gulp.task('images', ['clean-images'], function (){
 	return gulp
 			.src(config.images)
 			.pipe($.imagemin({optimizationLevel : 4 })) // by default is 3
-			.pipe(gulp.dest(config.build + 'images'));
-});
+			.pipe(gulp.dest(config.build + 'images'))
+})
 
 gulp.task('clean', function (done) { 
 	var delconfig = [].concat(config.build,config.temp); // to get all the arrays in a unique array
@@ -88,7 +88,7 @@ gulp.task('clean-code', function () { // callback TODO
 			config.build + '**/*.html',
 			config.build + 'js/**/*.js'
 
-		); 
+		) 
 	clean(files);
 });
 
@@ -106,7 +106,7 @@ gulp.task('templatecache' , ['clean-code'] ,function () {
 			config.templateCache.file ,
 			config.templateCache.options)) // gulp-angular-templatecache 
 			.pipe(gulp.dest(config.temp));
-});	
+})	
 
 gulp.task('wiredep' , function () {
 	log('Wire up the bower css js and our app js into the html');
@@ -153,8 +153,7 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 			.pipe(jsLibFilter.restore) // restore to get back all the js of App files
 			.pipe(jsAppFilter)//filter all the js of App to minimize it with uglify
 			.pipe($.ngAnnotate( { add: true } )) // To only modify custom code , we must separe in two variables JS.
-			//With this gulp plugin we achieve that angularjs recognized the variable names
-			// and inject the correct name without mangling.
+			//With this gulp plugin we achieve that angularjs recognized the variable names and inject the correct name without mangling.
 			.pipe($.uglify())//minimize all the js of App
 			.pipe(jsAppFilter.restore) // restore to get back all the js of App files
 			.pipe($.rev()) // app.js --> app-1281957r.js
@@ -163,52 +162,16 @@ gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
 // tags build.
 			.pipe($.useref()) // to get only one line link for the differents assets.
 			.pipe($.revReplace())// to secure that the injection to the html is done with the modified name.
-			.pipe($.rev.manifest()) // this generate a external document when its available the old and new names.
 			.pipe(gulp.dest(config.build));
-});
-
-
-
-// Bump the version 
-// --type=pre will bump the prerelease version *.*.*-x
-// --type=patch or no flag will bump the patch version *.*.x
-// --type=minor will bump the minor version *.x.*
-// --type=major will bump the major version x.*.*
-// --version=1.2.3 will bump to a specific version and ignore other flags
-
-
-gulp.task('bump', function(){
-	var msg = 'Bumping versions';
-	var type = args.type;
-	var version = args.version;
-	var options = {};
-
-	if (version){
-		options.version = version;
-		msg += 'to' + version ;
-	}else {
-		options.type = type ;
-		msg += 'for a ' + type;
-	}
-	log(msg);
-	return gulp
-			.src(config.packages)
-			.pipe($.bump(options))
-			.pipe($.print())//to know which file is bumped
-			.pipe(gulp.dest(config.root));
-});
+})
 
 gulp.task('serve-build' , ['optimize'], function (){
 	serve(false /* isDev*/);
 
-});
+})
 
 gulp.task('serve-dev' , ['inject'], function (){
 	serve(true /* isDev*/);
-});
-
-gulp.task('test', ['vet','templatecache'], function (done){
-	startTests(true /* singleRun */, done );
 });
 
 /////////////
@@ -296,8 +259,7 @@ function startBrowserSync(isDev){
 		config.temp + '**/*.css'
 		] : [],
 		ghostMode : { 
-// this ghostMode is to do the same actions equal true in different browsers
-// at the same time. It will do the same scrolls .. etc
+// this ghostMode is to do the same actions equal true in different browsers at the same time. It will do the same scrolls .. etc
 			clicks : true,
 			location : false,
 			forms : true,
@@ -313,30 +275,6 @@ function startBrowserSync(isDev){
 	};
 
 	browserSync(options); 
-}
-
-function startTests(singleRun, done){
-	var karma = require('karma').server; //only need in this function
-	var excludeFiles = [];
-	var serverSpecs = config.serverIntegrationSpecs;
-
-	excludeFiles = serverSpecs;
-
-	karma.start({
-		configFile: __dirname + '/karma.conf.js',
-		exclude: excludeFiles,
-		singleRun: !!singleRun
-	}, karmaCompleted);
-
-	function karmaCompleted(karmaResult) {
-		log('Karma completed!');
-		if (karmaResult === 1){
-			done('karma : tests failed with code ' + karmaResult);
-		} else {
-			done();
-		}
-
-	}
 }
 
 function clean(path){
