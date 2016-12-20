@@ -1,3 +1,4 @@
+/*jshint -W033,-W101*/
 var gulp = require ('gulp');
 var args = require('yargs').argv;
 var browserSync = require('browser-sync');
@@ -325,7 +326,7 @@ function startTests(singleRun,done){
 	excludeFiles = serverSpecs;
 	
 	karma.start({
-		config : __dirname +'/karma.conf.js',
+		configFile : __dirname +'/karma.conf.js',
 		exclude : excludeFiles ,
 		singleRun : !!singleRun
 

@@ -1,3 +1,4 @@
+/*jshint -W033,-W101*/
 module.exports = function () {
 	var client = './src/client/';
 	var clientApp = client + 'app/';
@@ -75,6 +76,7 @@ module.exports = function () {
 	/**
 	 * Karma and testing settings
 	 **/
+	specHelpers : [client + 'test-helpers/*.js'], 
 	serverIntegrationSpecs : [ client + 'tests/server-integration/**/*.spec.js'],
 
 
@@ -115,12 +117,14 @@ module.exports = function () {
 				reporters : [
 					{ type : 'html' , subdir : 'report-html'},
 					{ type : 'lcov' , subdir : 'report-lcov'},
-					{ type : 'text summary'}
+					{ type : 'text-summary'}
 				] 
 			},
 			preprocessors : {}
 		};
 		options.preprocessors[ clientApp + '**/!(*.spec)+(.js)'] = ['coverage'];
+		//exclude all spec files and get js files(see specific commits ( todo ))
+		return options;
 	}
  
 };

@@ -45,7 +45,9 @@
             };
 
             ready.$inject = ['dataservice'];
-            /* @ngInject */ // this comment is to add hints to the gulp plugin ng-annotate and avoid problems with AngularJS 
+            /* @ngInject */ 
+            // this comment is to add hints to the gulp plugin ng-annotate and avoid
+            // problems with AngularJS 
             function ready(dataservice) {
                 return dataservice.ready();
             }
