@@ -231,6 +231,12 @@ gulp.task('test' , ['vet' , 'templatecache'], function (done){
 	startTests(true /* singleRun */, done);
 });
 
+gulp.task('autotest' , ['vet' , 'templatecache'], function (done){
+	startTests(false /* singleRun */, done);
+});
+// To always watch our code in development environmet to continue test our new lines of code.
+// a kind of nodemon for test just changing one state of our singlerun startTests function.
+
 
 /////////////
 
