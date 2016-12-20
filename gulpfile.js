@@ -150,11 +150,21 @@ gulp.task('build-specs', ['templatecache'], function (){
 	log('building the spec runner');
 
 	var wiredep = require ('wiredep').stream ; // to work with gulp stream
-	var options = config.getWiredepDefaultOptions;
+	var options = config.getWiredepDefaultOptions();
+	var specs = config.specs;
 
 	return gulp
 			.src(config.specRunner)
-			.pipe(wiredep(options))
+			.pipe(wiredep(options)) //bower:js of specs.html 
+			.pipe($.inject(gulp.src(config.testlibraries),
+				{name : 'inject:testlibraries', read : false }))//test libraries charged
+			.pipe($.inject(gulp.src(config.js)))// all js
+			.pipe($.inject(gulp.src(config.specHelpers),
+				{name : 'inject:spechelpers', read : false }))//spec helpers charged
+			.pipe($.inject(gulp.src(config.specs),
+				{name : 'inject:specs', read : false }))//spec charged
+			.pipe($.inject(gulp.src(config.temp + config.templateCache.file),
+				{name : 'inject:templates', read : false }))//templates charged
 			.pipe(gulp.dest(config.client));
 })
 
