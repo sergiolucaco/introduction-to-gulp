@@ -146,6 +146,12 @@ gulp.task('build', ['optimize', 'fonts' , 'images'], function (){
 
 });
 
+gulp.task('serve-specs' , ['build-specs'], function (done){
+	log('Running the spec runner');
+	serve(true /* isDev */ , true /* specRunner */);
+	done();
+})
+
 gulp.task('build-specs', ['templatecache'], function (){
 	log('building the spec runner');
 
@@ -156,7 +162,7 @@ gulp.task('build-specs', ['templatecache'], function (){
 	return gulp
 			.src(config.specRunner)
 			.pipe(wiredep(options)) //bower:js of specs.html 
-			.pipe($.inject(gulp.src(config.testlibraries),
+			.pipe($.inject(gulp.src(config.testlibraries), // read option in last version of gulp-inject is not recognized and doesn't work well.(to-do)
 				{name : 'inject:testlibraries', read : false }))//test libraries charged
 			.pipe($.inject(gulp.src(config.js)))// all js
 			.pipe($.inject(gulp.src(config.specHelpers),
@@ -271,7 +277,7 @@ gulp.task('autotest' , ['vet' , 'templatecache'], function (done){
 
 // }
 
-function serve(isDev){
+function serve(isDev,specRunner){
 	var nodeOptions = {
 		script : config.nodeServer,
 		delayTime : 1,
@@ -294,7 +300,7 @@ function serve(isDev){
 		})
 		.on('start', function (){
 			log('*** nodemon started');
-			startBrowserSync(isDev);
+			startBrowserSync(isDev,specRunner);
 
 		})
 		.on('crash', function (){
@@ -324,7 +330,7 @@ function notify(options){
 	notifier.notify(notifyOptions);
 
 }
-function startBrowserSync(isDev){
+function startBrowserSync(isDev,specRunner){
 	if (args.nosync || browserSync.active) { 
 // if only want to active nodemon without browsersync || to see if it is actually running
 		return ; 
@@ -371,6 +377,10 @@ function startBrowserSync(isDev){
 		reloadDelay : 1000 //delay to show changes
 
 	};
+
+	if(specRunner){
+		options.startPath = config.specRunnerFile; // use this file instead of html in case specRunner is true
+	}
 
 	browserSync(options); 
 }
