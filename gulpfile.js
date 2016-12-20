@@ -354,11 +354,26 @@ function startBrowserSync(isDev){
 }
 
 function startTests(singleRun,done){
+	var child ;
+	var fork = require ('child_process').fork;
 	var karma = require('karma').server;
 	var excludeFiles = [];
 	var serverSpecs = config.serverIntegrationSpecs;
 
-	excludeFiles = serverSpecs;
+	if (args.startServers){ //gulp test--startServers
+		log('Starting server');
+		var savedEnv = process.env;
+		savedEnv.NODE_ENV = 'dev';
+		savedEnv.PORT = 8888;
+		child = fork(config.nodeServer);
+	}else {
+		if( serverSpecs && serverSpecs.length){
+		excludeFiles = serverSpecs;	
+		}
+	}
+
+
+	
 	
 	karma.start({
 		configFile : __dirname +'/karma.conf.js',
@@ -369,6 +384,11 @@ function startTests(singleRun,done){
 
 	function karmaCompleted(karmaResult){
 		log('karma completed');
+
+		if(child){
+			log('Shutting down the child process')
+			child.kill();
+		}
 		if(karmaResult === 1) {
 			done('karma : tests failed with code ' + karmaResult);
 		} else {
