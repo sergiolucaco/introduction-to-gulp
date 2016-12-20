@@ -144,6 +144,18 @@ gulp.task('build', ['optimize', 'fonts' , 'images'], function (){
 	notify(msg);
 
 
+});
+
+gulp.task('build-specs', ['templatecache'], function (){
+	log('building the spec runner');
+
+	var wiredep = require ('wiredep').stream ; // to work with gulp stream
+	var options = config.getWiredepDefaultOptions;
+
+	return gulp
+			.src(config.specRunner)
+			.pipe(wiredep(options))
+			.pipe(gulp.dest(config.client));
 })
 
 gulp.task('optimize' , [ 'inject' , 'test' ], function () {

@@ -5,6 +5,7 @@ module.exports = function () {
 	var rootdir = './';
 	var report = './report/';
 	var server = './src/server/';
+	var specRunnerFile = 'specs.html';
 	var temp = './.tmp/';
 	var wiredep = require('wiredep');
 	var bowerFiles = wiredep({devDependencies: true })['js'];
@@ -74,10 +75,17 @@ module.exports = function () {
 
 	 	],
 	/**
+	 * specs.html, our HTML spec runner
+	**/
+
+		specRunner : client + specRunnerFile,
+		specRunnerFile : specRunnerFile, 
+
+	/**
 	 * Karma and testing settings
 	 **/
-	specHelpers : [client + 'test-helpers/*.js'], 
-	serverIntegrationSpecs : [ client + 'tests/server-integration/**/*.spec.js'],
+		specHelpers : [client + 'test-helpers/*.js'], 
+		serverIntegrationSpecs : [ client + 'tests/server-integration/**/*.spec.js'],
 
 
 	/**
