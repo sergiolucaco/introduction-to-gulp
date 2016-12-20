@@ -104,12 +104,12 @@ module.exports = function () {
 	function getKarmaOptions(){
 		var options = {
 			files : [].concat(
-					bowerFiles,
+					bowerFiles,//angular jquery
 					config.specHelpers,
-					client + '**/*.module.js',
+					client + '**/*.module.js',//first those to download in correct order(our app)
 					client + '**/*.js',
-					temp + config.templateCache.file,
-					config.serverIntegrationSpecs
+					temp + config.templateCache.file,//templatcache of every html file
+					config.serverIntegrationSpecs//server files
 				),
 			exclude : [],
 			coverage : {
@@ -123,7 +123,8 @@ module.exports = function () {
 			preprocessors : {}
 		};
 		options.preprocessors[ clientApp + '**/!(*.spec)+(.js)'] = ['coverage'];
-		//exclude all spec files and get js files(see specific commits ( todo ))
+		//exclude all spec files and get js files
+		//to do stuff only in real code. Test only real code not also test code.
 		return options;
 	}
  

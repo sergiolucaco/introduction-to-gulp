@@ -4,6 +4,8 @@ var args = require('yargs').argv;
 var browserSync = require('browser-sync');
 var config = require('./gulp.config')();
 var del = require('del');
+var path = require('path');
+var _ = require('lodash');
 var port = process.env.PORT || config.defaultPort;
 // //Plugins Gulp
 // var jshint = require ('gulp-jshint');
@@ -129,7 +131,22 @@ gulp.task('inject' , ['wiredep','styles', 'templatecache'] ,   function () {
 			.pipe(gulp.dest(config.client));
 }); // This task will happen when the styles and the wiredep triggered .
 
-gulp.task('optimize' , [ 'inject' , 'fonts' , 'images' ], function () {
+gulp.task('build', ['optimize', 'fonts' , 'images'], function (){
+	log('Building everything');
+
+	var msg = {
+		title : 'gulp build',
+		subtitle : 'Deployed to the build folder',
+		message: 'Running `gulp serve-build`'
+	};
+	del(config.temp);
+	log(msg);
+	notify(msg);
+
+
+})
+
+gulp.task('optimize' , [ 'inject' , 'test' ], function () {
 	log('Optimizing html css and js');
 
 	var assets = $.useref.assets({searchPath: './'}); 
@@ -201,7 +218,7 @@ gulp.task('bump' , function(){
 
 })
 
-gulp.task('serve-build' , ['optimize'], function (){
+gulp.task('serve-build' , ['build'], function (){
 	serve(false /* isDev*/);
 
 })
@@ -265,6 +282,18 @@ function serve(isDev){
 function changeEvent (event) {
 	var srcPattern = new RegExp('/.*(?=/' + config.source + ')/');
 	log('File' + event.path.replace(srcPattern,'') + ' ' + event.type);
+
+}
+
+function notify(options){
+	var notifier = require('node-notifier');
+	var notifyOptions = {
+		sound : 'Bottle',
+		contentImage : path.join(__dirname, 'gulp.png'),
+		icon : path.join(__dirname, 'gulp.png')
+	};
+	_.assign(notifyOptions, options);
+	notifier.notify(notifyOptions);
 
 }
 function startBrowserSync(isDev){
