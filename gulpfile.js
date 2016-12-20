@@ -157,7 +157,11 @@ gulp.task('build-specs', ['templatecache'], function (){
 
 	var wiredep = require ('wiredep').stream ; // to work with gulp stream
 	var options = config.getWiredepDefaultOptions();
-	var specs = config.specs;
+	// var specs = config.specs;
+
+	options.devDependencies = true ;
+	//to read devDependencies and solve particular issues when run html test runner we need those dependencies.
+	//Normally it is needed only dependencies but in this case in particular devdependencies are also needed.
 
 	return gulp
 			.src(config.specRunner)
